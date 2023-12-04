@@ -1,0 +1,8 @@
+.vscode/
+__pycache__/
+token.txt
+gsCreds.json
+constants.txt
+.local
+.cache
+Data/

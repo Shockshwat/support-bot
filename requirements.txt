@@ -1,0 +1,8 @@
+aiohttp
+spacy
+py-cord[speed]
+CurrencyConverter
+pytz
+aiosqlite
+gspread
+oauth2client
