@@ -1,6 +1,6 @@
 # Support-bot
 
-Support-bot is a Discord bot designed for support communities. It uses a thread ticketing system to manage user queries effectively.
+Support-bot is a Discord bot designed for support communities. It uses a thread ticketing system to manage user queries effectively. It uses NLP (Natural Language Processing) to detect when people are asking for help in general and asks them to do so in the appropriate channel.
 
 ## Installation
 
