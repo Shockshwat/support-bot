@@ -35,9 +35,9 @@ async def on_member_join(member):
 
 
 @client.event
-async def on_command_error(ctx, error):
+async def on_slash_command_error(ctx, error):
     """
-    Called when an error occurs while executing a command. This is a callback for commands that return an error to the user.
+    Called when an error occurs while executing a slash command.
 
     @param ctx - The discord. Context object that the command was executed in.
     @param error - The error that occurred during execution of the command
@@ -45,18 +45,18 @@ async def on_command_error(ctx, error):
     # Send an error message to the client.
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send(
-            "You are missing one of the required arguments. Here is an empathy Banana for you. :banana:"
+            content="You are missing one of the required arguments. Here is an empathy Banana for you. :banana:"
         )
     elif isinstance(error, commands.BadArgument):
-        await ctx.send("Invald Syntax.")
+        await ctx.send(content="Invalid Syntax.")
     elif isinstance(error, commands.CheckFailure):
-        await ctx.send("Access denied, Are you sudo?")
+        await ctx.send(content="Access denied, Are you sudo?")
     elif isinstance(error, commands.CommandNotFound):
         await ctx.send(
-            f"{ctx.invoked_with} is not recognized as an internal or external command, operable program or batch file."
+            content=f"{ctx.invoked_with} is not recognized as an internal or external command, operable program or batch file."
         )
     else:
-        print(error)
+        await client.get_channel(init.logging_channel).send(error)
 
 
 @client.event
