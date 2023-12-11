@@ -42,23 +42,6 @@ def setup(client):
                 ephemeral=True,
             )
             return
-        await ctx.respond(
-            embed=discord.Embed(
-                title="Warning Issued",
-                description=f"{member.mention} has been warned for {reason}",
-                color=discord.Color.red(),
-            )
-        )
-
-        # Send DM to the warned member
-        try:
-            await member.send(
-                f"You've been warned in {ctx.guild.name} for {reason}. Please take note of this warning."
-            )
-        except discord.Forbidden:
-            await ctx.send(
-                f"Failed to send DM to {member.mention}. They may have DMs blocked."
-            )
         import aiosqlite
         from datetime import datetime
 
@@ -88,3 +71,20 @@ def setup(client):
                 ),
             )
             await db.commit()
+        await ctx.respond(
+            embed=discord.Embed(
+                title="Warning Issued",
+                description=f"{member.mention} has been warned for {reason}",
+                color=discord.Color.red(),
+            )
+        )
+
+        # Send DM to the warned member
+        try:
+            await member.send(
+                f"You've been warned in {ctx.guild.name} for {reason}. Please take note of this warning."
+            )
+        except:
+            await ctx.send(
+                f"Failed to send DM to {member.mention}. They may have DMs blocked."
+            )

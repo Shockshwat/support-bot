@@ -29,5 +29,5 @@ def register():
         client.load_extension(cmd)
     client.event(events.on_member_join)
     client.event(events.on_message)
-    client.event(events.on_command_error)
+    client.event(events.on_slash_command_error)
     client.event(events.on_thread_create)
