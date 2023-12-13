@@ -50,16 +50,6 @@ def setup(client):
 
         # Log the warning in the database
         async with aiosqlite.connect("Data/warns.db") as db:
-            await db.execute(
-                """
-                CREATE TABLE IF NOT EXISTS warnings (
-                    username TEXT,
-                    userid INTEGER,
-                    warn_date TEXT,
-                    reason TEXT
-                )
-            """
-            )
             # Insert the warning
             await db.execute(
                 """
