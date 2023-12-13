@@ -20,8 +20,8 @@ def setup(client):
 
         Usage: ^RP_add @user <amount>
         """
-        if member is None:
-            await ctx.respond("Please specify a user to add RP to.", ephemeral=True)
+        if ctx.guild_id is None:
+            await ctx.respond("This command cannot be used in a DM.", ephemeral=True)
             return
         conn = await sqlite3.connect("Data/RP.db")
         c = await conn.cursor()
@@ -65,6 +65,9 @@ def setup(client):
 
         Usage: ^RP_remove @user <amount>
         """
+        if ctx.guild_id is None:
+            await ctx.respond("This command cannot be used in a DM.", ephemeral=True)
+            return
         conn = await sqlite3.connect("Data/RP.db")
         c = await conn.cursor()
         await c.execute("SELECT RP_received FROM RP WHERE id = ?", (member.id,))
@@ -83,7 +86,7 @@ def setup(client):
         await ctx.respond(
             f"{ctx.author.mention} has removed {amount} RP from {member.mention}. They now have {member_rp_received} RP"
         )
-        if result[0] >= 50 and member_rp_received <= 50:
+        if result[0] >= 50 and member_rp_received < 50:
             role = ctx.guild.get_role(init.supporter_role_id)
             await member.remove_roles(role)
             await ctx.send(f"{role.name} Role has been removed from{member.mention}.")

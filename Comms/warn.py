@@ -30,6 +30,9 @@ def setup(client):
         """
         # Send warning message to the channel
         # If member. top_role is greater than or equal role send a warning about someone with higher or equal role.
+        if ctx.guild_id is None:
+            await ctx.respond("This command cannot be used in a DM.", ephemeral=True)
+            return
         if member == discord.User:
             await ctx.respond(
                 f"Sorry {ctx.author.mention}, you can't warn someone who is not in the server.",

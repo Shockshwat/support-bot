@@ -37,6 +37,9 @@ def setup(client):
     @option("file", description="The content to add")
     @discord.default_permissions(create_public_threads=True)
     async def info_add(ctx, topic: str, file: discord.Attachment):
+        if ctx.guild_id is None:
+            await ctx.respond("This command cannot be used in a DM.", ephemeral=True)
+            return
         if not file.filename.endswith(".txt"):
             await ctx.send("Invalid file type. Please upload a text file.")
         if (

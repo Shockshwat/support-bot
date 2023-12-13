@@ -23,6 +23,9 @@ def setup(client):
 
         Usage: ^purge <amount>
         """
+        if ctx.guild_id is None:
+            await ctx.respond("This command cannot be used in a DM.", ephemeral=True)
+            return
         await ctx.respond(
             f"Purged {amount} messages", ephemeral=True
         )  # delete the command message

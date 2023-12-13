@@ -27,6 +27,9 @@ def setup(client):
 
         Usage: ^kick <member> <reason>
         """
+        if ctx.guild_id is None:
+            await ctx.respond("This command cannot be used in a DM.", ephemeral=True)
+            return
         if member.top_role >= ctx.author.top_role:
             await ctx.respond(
                 f"Sorry {ctx.author.mention}, you can't kick someone with higher or equal role.",

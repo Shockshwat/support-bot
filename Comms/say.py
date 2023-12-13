@@ -22,5 +22,8 @@ def setup(client):
         @param channel - discord. Channel to send the message to
         @param msg - string. Message to send
         """
+        if ctx.guild_id is None:
+            await ctx.respond("This command cannot be used in a DM.", ephemeral=True)
+            return
         await channel.send(msg)
         await ctx.respond("Message sent.", ephemeral=True)

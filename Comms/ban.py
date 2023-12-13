@@ -27,6 +27,9 @@ def setup(client):
 
         Usage: ^ban @user reason
         """
+        if ctx.guild_id is None:
+            await ctx.respond("This command cannot be used in a DM.", ephemeral=True)
+            return
         if ctx.author == member:
             await ctx.respond("You can't ban yourself, dummy", ephemeral=True)
         elif member.top_role >= ctx.author.top_role:

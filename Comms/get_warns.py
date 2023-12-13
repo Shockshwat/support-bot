@@ -23,6 +23,10 @@ def setup(client):
         import aiosqlite
         from datetime import datetime
 
+        if ctx.guild_id is None:
+            await ctx.respond("This command cannot be used in a DM.", ephemeral=True)
+            return
+
         conn = await aiosqlite.connect("Data/warns.db")
         c = await conn.cursor()
         await c.execute("SELECT * FROM warnings WHERE userid = ?", (member.id,))
