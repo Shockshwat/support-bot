@@ -6,3 +6,4 @@ pytz
 aiosqlite
 gspread
 oauth2client
+cogwatch
