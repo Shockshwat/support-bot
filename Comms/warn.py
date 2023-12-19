@@ -1,12 +1,16 @@
 import discord
 import bot
 from discord import option
+from discord.ext import commands
 
 client = bot.client
 
 
-def setup(client):
-    @client.slash_command(name="warn", description="Warns a member")
+class WarnCommand(commands.Cog):
+    def __init__(self, client):
+        self.client = client
+
+    @commands.slash_command(name="warn", description="Warns a member")
     @discord.default_permissions(kick_members=True)
     @option("member", description="The member to warn")
     @option(
@@ -15,6 +19,7 @@ def setup(client):
         default="Reason not specified",
     )
     async def warn(
+        self,
         ctx,
         member: discord.Member,
         reason=discord.Option(str, name="Reason", required=False),
@@ -81,3 +86,7 @@ def setup(client):
             await ctx.send(
                 f"Failed to send DM to {member.mention}. They may have DMs blocked."
             )
+
+
+def setup(client):
+    client.add_cog(WarnCommand(client))

@@ -3,18 +3,25 @@ import bot
 import aiosqlite as sqlite3
 from discord import Embed
 from discord import option
-from discord.ext import tasks
+from discord.ext import tasks, commands
 import init
 
 client = bot.client
 
 
-def setup(client):
-    RP = client.create_group("rp", "RP Commands")
+class RPCommand(commands.Cog):
+    def __init__(self, client):
+        self.client = client
+        self.reset_rp.start()
+
+    def cog_unload(self):
+        self.reset_rp.cancel()
+
+    RP = discord.commands.SlashCommandGroup("rp", "RP Commands")
 
     @RP.command(name="check", description="Checks the RP of a user")
     @option("member", description="The member to check RP for", required=False)
-    async def RP_check(ctx, member: discord.Member):
+    async def RP_check(self, ctx, member: discord.Member):
         """
         Adds RP to a user, getting to 10 RP will grant the user Supporters Role
 
@@ -42,7 +49,7 @@ def setup(client):
     @RP.command(name="give", description="Gives a specified amount of RP to a user")
     @option("member", description="The member to give RP to")
     @option("amount", description="The amount of RP to give", min_value=1, max_value=10)
-    async def RP_give(ctx, member: discord.Member, amount: int):
+    async def RP_give(self, ctx, member: discord.Member, amount: int):
         if ctx.author == member:
             await ctx.respond("You can't give yourself RP, dummy", ephemeral=True)
             return
@@ -101,7 +108,7 @@ def setup(client):
         await conn.close()
 
     @RP.command(name="leaderboard", description="Shows the RP leaderboard")
-    async def RP_leaderboard(ctx):
+    async def RP_leaderboard(self, ctx):
         """
         Displays an embed with the top 10 people with the most RP.
 
@@ -132,12 +139,15 @@ def setup(client):
         await c.close()
         await conn.close()
 
+    @tasks.loop(hours=24)
+    async def reset_rp(self):
+        conn = await sqlite3.connect("Data/RP.db")
+        c = await conn.cursor()
+        await c.execute("UPDATE RP SET RP_given = 10")
+        await conn.commit()
+        await c.close()
+        await conn.close()
 
-@tasks.loop(hours=24)
-async def reset_rp():
-    conn = await sqlite3.connect("Data/RP.db")
-    c = await conn.cursor()
-    await c.execute("UPDATE RP SET RP_given = 10")
-    await conn.commit()
-    await c.close()
-    await conn.close()
+
+def setup(client):
+    client.add_cog(RPCommand(client))

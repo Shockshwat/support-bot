@@ -1,4 +1,4 @@
-import discord
+from discord.ext import commands
 import bot
 import asyncio
 import init
@@ -6,9 +6,12 @@ import init
 client = bot.client
 
 
-def setup(client):
-    @client.slash_command(name="close", description="Closes a support thread")
-    async def close(ctx):
+class CloseCommand(commands.Cog):
+    def __init__(self, client):
+        self.client = client
+
+    @commands.slash_command(name="close", description="Closes a support thread")
+    async def close(self, ctx):
         """
         Closes the thread. This will be resolved to the moderator if you wish to reopen it. You can only close public threads
 
@@ -38,3 +41,7 @@ def setup(client):
                 await ctx.channel.delete()
         else:
             await ctx.respond("Sorry this command can only be used in help threads.")
+
+
+def setup(client):
+    client.add_cog(CloseCommand(client))

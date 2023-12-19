@@ -5,16 +5,20 @@ import discord
 import random
 import time
 import init
+from discord.ext import commands
 
 client = bot.client
 
 
-def setup(client):
-    info = client.create_group("info", "Information Commands")
+class InfoCommand(commands.Cog):
+    def __init__(self, client):
+        self.client = client
 
-    @info.command(name="tell", description="Sends the information about the topic")
+    info = discord.SlashCommandGroup("info", "Information Commands")
+
+    @commands.command(name="tell", description="Sends the information about the topic")
     @option("topic", description="The topic to get information about")
-    async def tell(ctx, topic: str):
+    async def tell(self, ctx, topic: str):
         for x in information.get_data()["name"]:
             if topic.lower() == x:
                 await ctx.respond(
@@ -30,13 +34,13 @@ def setup(client):
         )
         return
 
-    @client.slash_command(
-        name="add", description="Adds a topic to the information system"
+    @commands.slash_command(
+        name="info_add", description="Adds a topic to the information system"
     )
     @option("topic", description="The topic to add")
     @option("file", description="The content to add")
     @discord.default_permissions(create_public_threads=True)
-    async def info_add(ctx, topic: str, file: discord.Attachment):
+    async def info_add(self, ctx, topic: str, file: discord.Attachment):
         if ctx.guild_id is None:
             await ctx.respond("This command cannot be used in a DM.", ephemeral=True)
             return
@@ -75,12 +79,12 @@ def setup(client):
         await ctx.respond("Topic added!")
         return
 
-    @client.slash_command(
-        name="remove", description="Removes a topic from the information system"
+    @commands.slash_command(
+        name="info_remove", description="Removes a topic from the information system"
     )
     @option("topic", description="The topic to remove")
     @discord.default_permissions(kick_members=True)
-    async def info_remove(ctx, topic: str):
+    async def info_remove(self, ctx, topic: str):
         if ctx.guild.get_role(init.staff_role_id) not in ctx.author.roles:
             await ctx.respond(
                 "You do not have permission to use this command!", ephemeral=True
@@ -99,10 +103,14 @@ def setup(client):
         return
 
     @info.command(name="list", description="Lists all topics")
-    async def info_list(ctx):
+    async def info_list(self, ctx):
         await ctx.respond(
             "Available topics are: "
             + ", ".join([name.capitalize() for name in information.get_data()["name"]]),
             ephemeral=True,
         )
         return
+
+
+def setup(client):
+    client.add_cog(InfoCommand(client))

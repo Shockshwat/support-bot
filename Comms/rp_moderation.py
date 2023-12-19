@@ -3,18 +3,22 @@ import bot
 from discord import option
 import aiosqlite as sqlite3
 import init
+from discord.ext import commands
 
 client = bot.client
 
 
-def setup(client):
-    @client.slash_command(
+class RPModCommand(commands.Cog):
+    def __init__(self, client):
+        self.client = client
+
+    @commands.slash_command(
         name="rp_add", description="Adds a specified amount of RP to a user"
     )
     @discord.default_permissions(kick_members=True)
     @option("member", description="The member to add RP to")
     @option("amount", description="The amount of RP to add", min_value=1)
-    async def RP_add(ctx, member: discord.Member, amount: int):
+    async def RP_add(self, ctx, member: discord.Member, amount: int):
         """
         Adds a specified amount of RP to a user
 
@@ -53,13 +57,13 @@ def setup(client):
         await c.close()
         await conn.close()
 
-    @client.slash_command(
+    @commands.slash_command(
         name="rp_remove", description="Removes a specified amount of RP from a user"
     )
     @discord.default_permissions(kick_members=True)
     @option("member", description="The member to remove RP from")
     @option("amount", description="The amount of RP to remove", min_value=1)
-    async def RP_remove(ctx, member: discord.Member, amount: int):
+    async def RP_remove(self, ctx, member: discord.Member, amount: int):
         """
         Removes a specified amount of RP from a user
 
@@ -93,3 +97,7 @@ def setup(client):
 
         await c.close()
         await conn.close()
+
+
+def setup(client):
+    client.add_cog(RPModCommand(client))

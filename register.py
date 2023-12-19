@@ -1,5 +1,4 @@
 import bot, events
-import Comms
 
 client = bot.client
 
@@ -7,15 +6,15 @@ client = bot.client
 def register():
     commands = [
         "Comms.warn",
+        "Comms.info",
         "Comms.kick",
+        "Comms.purge",
         "Comms.ban",
         "Comms.help",
         "Comms.report",
         "Comms.feature_request",
         "Comms.get_warns",
         "Comms.convert",
-        "Comms.purge",
-        "Comms.info",
         "Comms.rp",
         "Comms.convert_timezone",
         "Comms.rp_moderation",
@@ -24,6 +23,7 @@ def register():
         "Comms.easter_egg",
         "Comms.bug_report",
         "Comms.close",
+        "Comms.reload",
     ]
     for cmd in commands:
         client.load_extension(cmd)

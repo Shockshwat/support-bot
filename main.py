@@ -9,13 +9,8 @@ register.register()
 
 
 @client.event
-async def on_connect():
-    if not rp.reset_rp.is_running():
-        await rp.reset_rp.start()
-
-
-@client.event
 async def on_ready():
+    await client.sync_commands()
     await client.change_presence(
         activity=discord.Activity(type=discord.ActivityType.watching, name="You")
     )

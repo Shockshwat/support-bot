@@ -1,15 +1,19 @@
 import discord
 import bot
 from discord import option
+from discord.ext import commands
 
 client = bot.client
 
 
-def setup(client):
-    @client.slash_command(name="get_warns", description="Gets warns for a user")
+class GetWarnsCommand(commands.Cog):
+    def __init__(self, client):
+        self.client = client
+
+    @commands.slash_command(name="get_warns", description="Gets warns for a user")
     @discord.default_permissions(kick_members=True)
     @option("member", description="The member to get warns for")
-    async def get_warns(ctx, member: discord.Member):
+    async def get_warns(self, ctx, member: discord.Member):
         """
         Gets warns for a user. This will return a list of tuples ( reason id ). If there are no warnings for the user the function will return an empty list
 
@@ -56,3 +60,7 @@ def setup(client):
             )
 
         await ctx.respond(embed=embed)
+
+
+def setup(client):
+    client.add_cog(GetWarnsCommand(client))

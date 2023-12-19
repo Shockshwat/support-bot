@@ -2,11 +2,15 @@ import discord
 from discord import option
 import bot
 import init
+from discord.ext import commands
 
 client = bot.client
 
 
-def setup(client):
+class BanCommand(commands.Cog):
+    def __init__(self, client):
+        self.client = client
+
     @client.slash_command(name="ban", description="Bans a member")
     @discord.default_permissions(ban_members=True)
     @option("member", description="The member to ban")
@@ -14,6 +18,7 @@ def setup(client):
         "reason", description="The reason for the ban", default="Reason not specified"
     )
     async def ban(
+        self,
         ctx,
         member: discord.Member,
         reason: str,
@@ -62,3 +67,8 @@ def setup(client):
                         description=f"{member.mention} has been banned from the server for reason: {reason}.",
                     )
                 )
+
+
+def setup(client):
+    if not any(isinstance(c, BanCommand) for c in client.cogs.values()):
+        client.add_cog(BanCommand(client))

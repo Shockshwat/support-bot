@@ -2,18 +2,23 @@ import bot
 from discord import option
 import discord
 import init
+from discord.ext import commands
 
 client = bot.client
 
 
-def setup(client):
-    @client.slash_command(name="kick", description="Kicks a member")
+class KickCommand(commands.Cog):
+    def __init__(self, client):
+        self.client = client
+
+    @commands.slash_command(name="kick", description="Kicks a member")
     @discord.default_permissions(kick_members=True)
     @option("member", description="The member to kick")
     @option(
         "reason", description="The reason for the kick", default="Reason not specified"
     )
     async def kick(
+        self,
         ctx,
         member: discord.Member,
         reason: str,
@@ -59,3 +64,7 @@ def setup(client):
                         description=f"{member.mention} has been banned from the server for reason: {reason}.",
                     )
                 )
+
+
+def setup(client):
+    client.add_cog(KickCommand(client))

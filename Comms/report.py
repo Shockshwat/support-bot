@@ -2,18 +2,23 @@ import discord
 import bot
 from discord import option
 import init
+from discord.ext import commands
 
 client = bot.client
 
 
-def setup(client):
-    @client.slash_command(name="report", description="Reports a user")
+class ReportCommand(commands.Cog):
+    def __init__(self, client):
+        self.client = client
+
+    @commands.slash_command(name="report", description="Reports a user")
     @option("member", description="The member to report")
     @option("reason", description="The reason for the report")
     @option(
         "message", description="The message to report", default="Message not specified"
     )
     async def report(
+        self,
         ctx,
         member: discord.Member,
         reason: str,
@@ -48,3 +53,7 @@ def setup(client):
             "Thank you for your report, the moderators have been notified.",
             ephemeral=True,
         )
+
+
+def setup(client):
+    client.add_cog(ReportCommand(client))
