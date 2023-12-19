@@ -1,4 +1,5 @@
 import bot, events
+from cogwatch import Watcher
 
 client = bot.client
 
@@ -31,3 +32,4 @@ def register():
     client.event(events.on_message)
     client.event(events.on_slash_command_error)
     client.event(events.on_thread_create)
+
