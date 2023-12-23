@@ -33,7 +33,14 @@ class SayCommand(commands.Cog):
         if ctx.guild_id is None:
             await ctx.respond("This command cannot be used in a DM.", ephemeral=True)
             return
-        await channel.send(msg)
+        try:
+            await channel.send(msg)
+        except:
+            await ctx.respond(
+                "Failed to send message, Either the channel is inaccessible or permission not given.",
+                ephemeral=True,
+            )
+            return
         await ctx.respond("Message sent.", ephemeral=True)
         await client.get_channel(init.general_log_channel_id).send(
             f"{ctx.author.mention} sent a message in {channel.mention} saying {msg}"
@@ -59,7 +66,14 @@ class SayCommand(commands.Cog):
         if ctx.guild_id is None:
             await ctx.respond("This command cannot be used in a DM.", ephemeral=True)
             return
-        await user.send(msg)
+        try:
+            await user.send(msg)
+        except:
+            await ctx.respond(
+                "Failed to send message, user must have their DMs blocked.",
+                ephemeral=True,
+            )
+            return
         await ctx.respond("Message sent.", ephemeral=True)
         await client.get_channel(init.general_log_channel_id).send(
             f"{ctx.author.mention} sent a message to {user.mention} saying {msg}"
