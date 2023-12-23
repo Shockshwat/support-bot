@@ -2,6 +2,7 @@ import discord
 import bot
 from discord import option
 from discord.ext import commands
+import init
 
 client = bot.client
 
@@ -34,6 +35,9 @@ class SayCommand(commands.Cog):
             return
         await channel.send(msg)
         await ctx.respond("Message sent.", ephemeral=True)
+        await client.get_channel(init.general_log_channel_id).send(
+            f"{ctx.author.mention} sent a message in {channel.mention} saying {msg}"
+        )
 
     @say.command(name="user", description="Says a message")
     @discord.default_permissions(kick_members=True)
@@ -57,6 +61,9 @@ class SayCommand(commands.Cog):
             return
         await user.send(msg)
         await ctx.respond("Message sent.", ephemeral=True)
+        await client.get_channel(init.general_log_channel_id).send(
+            f"{ctx.author.mention} sent a message to {user.mention} saying {msg}"
+        )
 
 
 def setup(client):

@@ -25,3 +25,4 @@ with open("constants.txt", "r") as f:
     developer_role_id = int(Content[7].replace("DEVELOPERS_ROLE:", ""))
     report_channel_id = int(Content[8].replace("REPORT_CHANNEL:", ""))
     rp_log_channel_id = int(Content[9].replace("RP_LOG_CHANNEL:", ""))
+    general_log_channel_id = int(Content[10].replace("GENERAL_LOG_CHANNEL:", ""))
